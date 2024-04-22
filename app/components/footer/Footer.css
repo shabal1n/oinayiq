@@ -1,0 +1,99 @@
+footer * {
+  background: rgba(0, 0, 0, 1);
+  /* margin-top: 3em; */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+footer h6 {
+  color: white;
+  margin-bottom: 1em;
+  font-size: large;
+}
+
+footer p {
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 2em;
+  font-size: medium;
+}
+
+.buttons-parent {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding-top: 2em;
+  margin-inline: auto;
+  padding: 4em;
+}
+
+.language-currency {
+  width: 30%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: flex-start;
+}
+
+.company {
+  height: 100%;
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: flex-start;
+}
+
+.help {
+  height: 100%;
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: flex-start;
+}
+
+.payment-methods {
+  height: 100%;
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: flex-start;
+}
+
+.select-footer-button-container {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 1em;
+  width: 50%;
+}
+
+.select-footer-button {
+  color: white;
+  font-size: large;
+  height: auto;
+  width: 100%;
+}
+
+.all-rights {
+  padding-bottom: 1em;
+}
+
+.all-rights p {
+  margin-left: 2em;
+}
+
+.methods-grid {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.methods-grid img {
+  max-width: 100%;
+  height: auto;
+  margin-block: 0.2em;
+}

@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  name           String?
+  email          String?   @unique
+  emailVerified  DateTime?
+  image          String?
+  hashedPassword String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  favoriteIds    String[]  @db.ObjectId
+
+  accounts     Accounts[]
+  listings     Listings[]
+  reservations Reservations[]
+}
+
+model Accounts {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  user Users @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Listings {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  description   String
+  sport         String
+  imageSrc      String
+  createdAt     DateTime @default(now())
+  roomCount     Int
+  bathroomCount Int
+  guestCount    Int
+  locationValue String
+  userId        String   @db.ObjectId
+  price         Int
+  latitude      Float
+  longitude     Float
+
+  user         Users          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reservations Reservations[]
+}
+
+model Sports {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  icon        String
+  label       String
+  description String
+}
+
+model Reservations {
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String     @db.ObjectId
+  listingId  String     @db.ObjectId
+  startDate  DateTime
+  endDate    DateTime
+  timeSlots  TimeSlots[]
+  totalPrice Int
+  createdAt  DateTime   @default(now())
+  orderId    String     @unique
+  isPaid     Boolean    @default(false)
+
+  user    Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing Listings @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+model TimeSlots {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  reservationId String   @db.ObjectId
+  startTime     DateTime
+  endTime       DateTime
+
+  reservation Reservations @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+}
