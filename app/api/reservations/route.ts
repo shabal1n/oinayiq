@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     amount: totalPrice,
     description: "Payment for sport center reservation",
     back_url: `https://${request.headers.get("host")}/listings/${listingId}`,
-    success_url: `https://${request.headers.get("host")}/trips`,
+    success_url: `https://${request.headers.get("host")}/rents`,
     failure_url: `https://${request.headers.get("host")}/listings/${listingId}`,
   });
 

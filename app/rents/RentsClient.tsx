@@ -11,12 +11,12 @@ import Heading from "@/app/components/Heading";
 import Container from "@/app/components/Container";
 import ListingCard from "@/app/components/listings/ListingCard";
 
-interface TripsClientProps {
+interface RentsClientProps {
   reservations: SafeReservation[];
   currentUser?: SafeUser | null;
 }
 
-const TripsClient: React.FC<TripsClientProps> = ({
+const RentsClient: React.FC<RentsClientProps> = ({
   reservations,
   currentUser,
 }) => {
@@ -79,4 +79,4 @@ const TripsClient: React.FC<TripsClientProps> = ({
   );
 };
 
-export default TripsClient;
+export default RentsClient;

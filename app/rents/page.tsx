@@ -4,9 +4,9 @@ import ClientOnly from "@/app/components/ClientOnly";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import getReservations from "@/app/actions/getReservations";
 
-import TripsClient from "./TripsClient";
+import RentsClient from "./RentsClient";
 
-const TripsPage = async () => {
+const RentsPage = async () => {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
@@ -32,9 +32,9 @@ const TripsPage = async () => {
 
   return (
     <ClientOnly>
-      <TripsClient reservations={reservations} currentUser={currentUser} />
+      <RentsClient reservations={reservations} currentUser={currentUser} />
     </ClientOnly>
   );
 };
 
-export default TripsPage;
+export default RentsPage;
