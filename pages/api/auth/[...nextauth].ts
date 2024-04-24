@@ -19,6 +19,9 @@ export const authOptions: AuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      httpOptions: {
+        timeout: 60000,
+      },
     }),
     CredentialsProvider({
       name: "credentials",
