@@ -94,13 +94,13 @@ const RegisterModal = () => {
         outline
         label="Continue with Google"
         icon={FcGoogle}
-        onClick={() => signIn("google", { callbackUrl: "/" })}
+        onClick={() => signIn("google")}
       />
       <Button
         outline
         label="Continue with Github"
         icon={AiFillGithub}
-        onClick={() => signIn("github", { callbackUrl: "/" })}
+        onClick={() => signIn("github")}
       />
       <div
         className="
