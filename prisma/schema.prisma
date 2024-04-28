@@ -79,7 +79,7 @@ model Reservations {
   listingId  String     @db.ObjectId
   startDate  DateTime
   endDate    DateTime
-  timeSlots  TimeSlots[]
+  timeSlots  DateTime[]
   totalPrice Int
   createdAt  DateTime   @default(now())
   orderId    String     @unique
@@ -87,13 +87,4 @@ model Reservations {
 
   user    Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing Listings @relation(fields: [listingId], references: [id], onDelete: Cascade)
-}
-
-model TimeSlots {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  reservationId String   @db.ObjectId
-  startTime     DateTime
-  endTime       DateTime
-
-  reservation Reservations @relation(fields: [reservationId], references: [id], onDelete: Cascade)
 }

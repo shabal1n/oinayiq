@@ -52,18 +52,10 @@ const ListingClient: React.FC<ListingClientProps> = ({
   }, [listings.sport]);
 
   const disabledHours = useMemo(() => {
-    let hours: number[] = [];
-    console.log(reservations);
+    let hours: string[] = [];
 
     reservations.forEach((reservation: any) => {
-      const range = eachDayOfInterval({
-        start: new Date(reservation.startDate),
-        end: new Date(reservation.endDate),
-      });
-
-      range.forEach((date) => {
-        hours = [...hours, date.getHours()];
-      });
+      hours = [...hours, ...reservation.timeSlots];
     });
 
     return hours;
@@ -181,7 +173,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                 onSubmit={onCreateReservation}
                 disabled={isLoading}
                 disabledDates={disabledDates}
-                // disabledHours={disabledHours}
+                bookedTimeSlots={disabledHours}
               />
             </div>
           </div>

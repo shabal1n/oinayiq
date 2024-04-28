@@ -16,6 +16,7 @@ interface ListingReservationProps {
   onSubmit: () => void;
   disabled?: boolean;
   disabledDates: Date[];
+  bookedTimeSlots: string[];
 }
 
 const ListingReservation: React.FC<ListingReservationProps> = ({
@@ -27,6 +28,7 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
   onSubmit,
   disabled,
   disabledDates,
+  bookedTimeSlots,
 }) => {
   const handleTimeSlotChange = async (value: string) => {
     try {
@@ -60,7 +62,7 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
         disabledDates={disabledDates}
         onChange={(value) => onChangeDate(value.selection)}
       />
-      <TimeSlots onChange={handleTimeSlotChange} />
+      <TimeSlots bookedSlots={bookedTimeSlots} />
       <hr />
       <div className="p-4">
         <Button disabled={disabled} label="Reserve" onClick={onSubmit} />
