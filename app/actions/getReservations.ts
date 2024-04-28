@@ -33,6 +33,7 @@ export default async function getReservations(params: IParams) {
         createdAt: "desc",
       },
     });
+    // console.log(reservations);
 
     const safeReservations = reservations.map((reservation) => ({
       ...reservation,
@@ -43,9 +44,7 @@ export default async function getReservations(params: IParams) {
         ...reservation.listing,
         createdAt: reservation.listing.createdAt.toISOString(),
       },
-      timeSlots: reservation.timeSlots.map((timeSlot) => ({
-        ...timeSlot,
-      })),
+      timeSlots: reservation.timeSlots,
     }));
 
     return safeReservations;

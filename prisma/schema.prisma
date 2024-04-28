@@ -53,9 +53,6 @@ model Listings {
   sport         String
   imageSrc      String
   createdAt     DateTime @default(now())
-  roomCount     Int
-  bathroomCount Int
-  guestCount    Int
   locationValue String
   userId        String   @db.ObjectId
   price         Int
@@ -79,7 +76,7 @@ model Reservations {
   listingId  String     @db.ObjectId
   startDate  DateTime
   endDate    DateTime
-  timeSlots  DateTime[]
+  timeSlots  String[]
   totalPrice Int
   createdAt  DateTime   @default(now())
   orderId    String     @unique

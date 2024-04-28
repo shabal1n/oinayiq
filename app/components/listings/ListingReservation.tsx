@@ -6,6 +6,7 @@ import Button from "../Button";
 import Calendar from "../inputs/Calendar";
 import TimeSlots from "../inputs/TimeSlots";
 import axios from "axios";
+import { useState } from "react";
 
 interface ListingReservationProps {
   price: number;
@@ -39,6 +40,9 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
     }
   };
 
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [bookedSlots, setBookedSlots] = useState([]);
+
   return (
     <div
       className="
@@ -62,7 +66,7 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
         disabledDates={disabledDates}
         onChange={(value) => onChangeDate(value.selection)}
       />
-      <TimeSlots bookedSlots={bookedTimeSlots} />
+      <TimeSlots date={dateRange.startDate} bookedSlots={bookedTimeSlots} />
       <hr />
       <div className="p-4">
         <Button disabled={disabled} label="Reserve" onClick={onSubmit} />

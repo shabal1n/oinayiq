@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import { Range } from "react-date-range";
 import { useRouter } from "next/navigation";
-import { differenceInDays, eachDayOfInterval } from "date-fns";
+import { differenceInDays, eachDayOfInterval, format } from "date-fns";
 
 import useLoginModal from "@/app/hooks/useLoginModal";
 import { Order, SafeListings, SafeReservation, SafeUser } from "@/app/types";
@@ -70,9 +70,36 @@ const ListingClient: React.FC<ListingClientProps> = ({
         end: new Date(reservation.endDate),
       });
 
-      dates = [...dates, ...range];
-    });
+      range.forEach((date) => {
+        const timeSlots = reservation.timeSlots || [];
+        const allTimesBooked = [
+          "11:00",
+          "12:00",
+          "13:00",
+          "14:00",
+          "15:00",
+          "16:00",
+          "17:00",
+          "18:00",
+          "19:00",
+          "20:00",
+          "21:00",
+          "22:00",
+        ].every((time) => timeSlots.includes(time));
 
+        if (allTimesBooked) {
+          const dateStr = format(date, "yyyy-MM-dd");
+          const disabledDateStr = format(
+            new Date(reservation.startDate),
+            "yyyy-MM-dd"
+          );
+
+          if (dateStr === disabledDateStr) {
+            dates.push(date);
+          }
+        }
+      });
+    });
     return dates;
   }, [reservations]);
 
@@ -149,9 +176,6 @@ const ListingClient: React.FC<ListingClientProps> = ({
             <ListingInfo
               sport={sport}
               description={listings.description}
-              roomCount={listings.roomCount}
-              guestCount={listings.guestCount}
-              bathroomCount={listings.bathroomCount}
               locationValue={listings.locationValue}
               latitude={listings.latitude}
               longitude={listings.longitude}

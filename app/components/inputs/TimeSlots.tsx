@@ -3,12 +3,11 @@
 import React, { useState } from "react";
 
 interface TimeSlotsProps {
+  date: Date | undefined;
   bookedSlots: string[];
 }
 
-const TimeSlots: React.FC<TimeSlotsProps> = ({
-  bookedSlots = [],
-}) => {
+const TimeSlots: React.FC<TimeSlotsProps> = ({ bookedSlots = [] }) => {
   const [selectedSlots, setSelectedSlots] = useState<string[]>([]);
 
   const handleSelect = (slot: string) => {
@@ -41,7 +40,9 @@ const TimeSlots: React.FC<TimeSlotsProps> = ({
         className={`${
           selectedSlots.includes(slot)
             ? "bg-gray-500 text-white"
-            : "bg-gray-200 text-gray-700"
+            : bookedSlots.includes(slot)
+            ? "bg-gray-100 text-gray-400"
+            : "bg-transparent text-black border border-gray-500"
         } px-4 py-2 rounded-md mr-2 mb-2`}
         onClick={() => handleSelect(slot)}
         disabled={bookedSlots.includes(slot)}
