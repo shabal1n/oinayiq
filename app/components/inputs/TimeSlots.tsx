@@ -5,6 +5,7 @@ import React, { useState } from "react";
 interface TimeSlotsProps {
   date: Date | undefined;
   bookedSlots: string[];
+  onTimeSlotChange: (value: string[]) => void;
 }
 
 const TimeSlots: React.FC<TimeSlotsProps> = ({ bookedSlots = [] }) => {

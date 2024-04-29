@@ -106,6 +106,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [totalPrice, setTotalPrice] = useState(listings.price);
   const [dateRange, setDateRange] = useState<Range>(initialDateRange);
+  const [timeSlots, setTimeSlots] = useState<string[]>([]);
 
   const onCreateReservation = useCallback(async () => {
     if (!currentUser) {
@@ -119,6 +120,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
         totalPrice: totalPrice,
         startDate: dateRange.startDate,
         endDate: dateRange.endDate,
+        timeSlots: timeSlots,
         listingId: listings?.id,
       });
       setDateRange(initialDateRange);
@@ -192,12 +194,13 @@ const ListingClient: React.FC<ListingClientProps> = ({
                 price={listings.price}
                 totalPrice={totalPrice}
                 onChangeDate={(value) => setDateRange(value)}
-                onTimeSlotChange={(value) => console.log(value)}
+                onTimeSlotChange={setTimeSlots}
                 dateRange={dateRange}
                 onSubmit={onCreateReservation}
                 disabled={isLoading}
                 disabledDates={disabledDates}
                 bookedTimeSlots={disabledHours}
+                timeSlots={timeSlots}
               />
             </div>
           </div>

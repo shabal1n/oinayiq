@@ -11,9 +11,10 @@ import { useState } from "react";
 interface ListingReservationProps {
   price: number;
   dateRange: Range;
+  timeSlots: String[];
   totalPrice: number;
   onChangeDate: (value: Range) => void;
-  onTimeSlotChange: (value: string) => void;
+  onTimeSlotChange: (value: string[]) => void;
   onSubmit: () => void;
   disabled?: boolean;
   disabledDates: Date[];
@@ -31,14 +32,14 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
   disabledDates,
   bookedTimeSlots,
 }) => {
-  const handleTimeSlotChange = async (value: string) => {
-    try {
-      const response = await axios.post("/api/reserve", { timeSlot: value });
-      onTimeSlotChange(value);
-    } catch (error) {
-      console.error("Error reserving time slot:", error);
-    }
-  };
+  // const handleTimeSlotChange = async (value: string) => {
+  //   try {
+  //     const response = await axios.post("/api/reserve", { timeSlot: value });
+  //     onTimeSlotChange(value);
+  //   } catch (error) {
+  //     console.error("Error reserving time slot:", error);
+  //   }
+  // };
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [bookedSlots, setBookedSlots] = useState([]);
@@ -66,7 +67,11 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
         disabledDates={disabledDates}
         onChange={(value) => onChangeDate(value.selection)}
       />
-      <TimeSlots date={dateRange.startDate} bookedSlots={bookedTimeSlots} />
+      <TimeSlots
+        date={dateRange.startDate}
+        bookedSlots={bookedTimeSlots}
+        onTimeSlotChange={onTimeSlotChange}
+      />
       <hr />
       <div className="p-4">
         <Button disabled={disabled} label="Reserve" onClick={onSubmit} />
