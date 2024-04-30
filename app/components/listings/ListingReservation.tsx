@@ -11,7 +11,7 @@ import { useState } from "react";
 interface ListingReservationProps {
   price: number;
   dateRange: Range;
-  timeSlots: String[];
+  timeSlots: string[];
   totalPrice: number;
   onChangeDate: (value: Range) => void;
   onTimeSlotChange: (value: string[]) => void;
@@ -31,6 +31,7 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
   disabled,
   disabledDates,
   bookedTimeSlots,
+  timeSlots,
 }) => {
   // const handleTimeSlotChange = async (value: string) => {
   //   try {
@@ -70,7 +71,11 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
       <TimeSlots
         date={dateRange.startDate}
         bookedSlots={bookedTimeSlots}
-        onTimeSlotChange={(value) => onTimeSlotChange(value)}
+        onTimeSlotChange={(value) => {
+          onTimeSlotChange(value);
+          console.log(value);
+        }}
+        value={timeSlots}
       />
       <hr />
       <div className="p-4">
