@@ -13,8 +13,7 @@ const Search = () => {
   const { getByValue } = useDistricts();
 
   const locationValue = params?.get("locationValue");
-  const startDate = params?.get("startDate");
-  const endDate = params?.get("endDate");
+  const date = params?.get("date");
   const sportValue = params?.get("sport");
 
   const locationLabel = useMemo(() => {
@@ -33,15 +32,15 @@ const Search = () => {
   }, [sportValue, getByValue]);
 
   const durationLabel = useMemo(() => {
-    if (startDate) {
-      const start = new Date(startDate as string);
+    if (date) {
+      const start = new Date(date as string);
       return `${start.getDate()} ${start.toLocaleString("en", {
         month: "short",
       })}`;
     }
 
     return "Any Week";
-  }, [startDate, endDate]);
+  }, [date]);
 
   return (
     <div

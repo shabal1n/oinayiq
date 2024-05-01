@@ -5,15 +5,13 @@ import { Range } from "react-date-range";
 import Button from "../Button";
 import Calendar from "../inputs/Calendar";
 import TimeSlots from "../inputs/TimeSlots";
-import axios from "axios";
-import { useState } from "react";
 
 interface ListingReservationProps {
   price: number;
-  dateRange: Range;
+  date: Date;
   timeSlots: string[];
   totalPrice: number;
-  onChangeDate: (value: Range) => void;
+  onChangeDate: (value: Date) => void;
   onTimeSlotChange: (value: string[]) => void;
   onSubmit: () => void;
   disabled?: boolean;
@@ -24,7 +22,7 @@ interface ListingReservationProps {
 const ListingReservation: React.FC<ListingReservationProps> = ({
   onTimeSlotChange,
   price,
-  dateRange,
+  date,
   totalPrice,
   onChangeDate,
   onSubmit,
@@ -33,18 +31,6 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
   bookedTimeSlots,
   timeSlots,
 }) => {
-  // const handleTimeSlotChange = async (value: string) => {
-  //   try {
-  //     const response = await axios.post("/api/reserve", { timeSlot: value });
-  //     onTimeSlotChange(value);
-  //   } catch (error) {
-  //     console.error("Error reserving time slot:", error);
-  //   }
-  // };
-
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [bookedSlots, setBookedSlots] = useState([]);
-
   return (
     <div
       className="
@@ -64,12 +50,12 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
       </div>
       <hr />
       <Calendar
-        value={dateRange}
+        value={date}
         disabledDates={disabledDates}
-        onChange={(value) => onChangeDate(value.selection)}
+        onChange={(value) => onChangeDate(value)}
       />
       <TimeSlots
-        date={dateRange.startDate}
+        date={date}
         bookedSlots={bookedTimeSlots}
         onTimeSlotChange={(value) => {
           onTimeSlotChange(value);

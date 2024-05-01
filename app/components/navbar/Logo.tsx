@@ -12,7 +12,7 @@ const Logo = () => {
       className="text-2xl font-bold cursor-pointer"
       style={{ fontFamily: "Nico Moji" }}
     >
-      oinayiq
+      oinaiyq
     </p>
   );
 };
