@@ -108,6 +108,10 @@ const ListingClient: React.FC<ListingClientProps> = ({
   const [dateRange, setDateRange] = useState<Range>(initialDateRange);
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
 
+  const handleTimeSlotChange = (slots: string[]) => {
+    setTimeSlots(slots);
+  };
+
   const onCreateReservation = useCallback(async () => {
     if (!currentUser) {
       return loginModal.onOpen();
@@ -194,7 +198,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                 price={listings.price}
                 totalPrice={totalPrice}
                 onChangeDate={(value) => setDateRange(value)}
-                onTimeSlotChange={setTimeSlots}
+                onTimeSlotChange={handleTimeSlotChange}
                 dateRange={dateRange}
                 onSubmit={onCreateReservation}
                 disabled={isLoading}
