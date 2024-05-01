@@ -119,6 +119,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
     setIsLoading(true);
 
     let response: Order;
+    console.log("timeslots: ", timeSlots);
     try {
       const res = await axios.post("/api/reservations", {
         totalPrice: totalPrice,
@@ -138,7 +139,15 @@ const ListingClient: React.FC<ListingClientProps> = ({
     } finally {
       setIsLoading(false);
     }
-  }, [totalPrice, dateRange, listings?.id, router, currentUser, loginModal]);
+  }, [
+    totalPrice,
+    dateRange,
+    listings?.id,
+    router,
+    currentUser,
+    loginModal,
+    timeSlots,
+  ]);
 
   useEffect(() => {
     if (dateRange.startDate && dateRange.endDate) {

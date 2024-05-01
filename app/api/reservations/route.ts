@@ -15,7 +15,14 @@ export async function POST(request: Request) {
   const body = await request.json();
   const { listingId, startDate, endDate, totalPrice, timeSlots } = body;
 
-  if (!listingId || !startDate || !endDate || !totalPrice || !timeSlots) {
+  if (
+    !listingId ||
+    !startDate ||
+    !endDate ||
+    !totalPrice ||
+    !timeSlots ||
+    timeSlots.length === 0
+  ) {
     return NextResponse.error();
   }
 
