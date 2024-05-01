@@ -13,9 +13,16 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
-  const { listingId, startDate, endDate, totalPrice } = body;
+  const { listingId, startDate, endDate, totalPrice, timeSlots } = body;
 
-  if (!listingId || !startDate || !endDate || !totalPrice) {
+  if (
+    !listingId ||
+    !startDate ||
+    !endDate ||
+    !totalPrice ||
+    !timeSlots ||
+    timeSlots.length === 0
+  ) {
     return NextResponse.error();
   }
 
@@ -37,9 +44,9 @@ export async function POST(request: Request) {
           userId: currentUser.id,
           startDate,
           endDate,
-          // timeSlots,
           totalPrice,
           orderId: payment_order.order.id.trim(),
+          timeSlots,
         },
       },
     },
