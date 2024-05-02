@@ -4,7 +4,7 @@ import axios from "axios";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { eachDayOfInterval, format } from "date-fns";
+import { format } from "date-fns";
 
 import useLoginModal from "@/app/hooks/useLoginModal";
 import { Order, SafeListings, SafeReservation, SafeUser } from "@/app/types";
@@ -99,6 +99,26 @@ const ListingClient: React.FC<ListingClientProps> = ({
     setTimeSlots(slots);
   };
 
+  const handleTimeSlotDateChange = (value: Date) => {
+    const selectedDateStr = format(value, "yyyy-MM-dd");
+
+    const slotsForSelectedDate = reservations.find((reservation) => {
+      const reservationDateStr = format(
+        new Date(reservation.date),
+        "yyyy-MM-dd"
+      );
+      return reservationDateStr === selectedDateStr;
+    })?.timeSlots;
+
+    if (slotsForSelectedDate) {
+      setTimeSlots(slotsForSelectedDate);
+      console.log("Chnged Date: ", value, " ", slotsForSelectedDate);
+    } else {
+      setTimeSlots([]);
+      console.log("Chnged Date: ", value, "with no timeSlots");
+    }
+  };
+
   const onCreateReservation = useCallback(async () => {
     if (!currentUser) {
       return loginModal.onOpen();
@@ -143,6 +163,10 @@ const ListingClient: React.FC<ListingClientProps> = ({
       }
     }
   }, [date, listings.price, timeSlots]);
+
+  useEffect(() => {
+    handleTimeSlotDateChange(date);
+  }, [date, reservations]);
 
   return (
     <Container>
@@ -190,6 +214,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                 totalPrice={totalPrice}
                 onChangeDate={(value) => setDate(value)}
                 onTimeSlotChange={handleTimeSlotChange}
+                onTimeSlotDateChange={handleTimeSlotDateChange}
                 date={date}
                 onSubmit={onCreateReservation}
                 disabled={isLoading}

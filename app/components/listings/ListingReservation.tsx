@@ -1,7 +1,5 @@
 "use client";
 
-import { Range } from "react-date-range";
-
 import Button from "../Button";
 import Calendar from "../inputs/Calendar";
 import TimeSlots from "../inputs/TimeSlots";
@@ -13,6 +11,7 @@ interface ListingReservationProps {
   totalPrice: number;
   onChangeDate: (value: Date) => void;
   onTimeSlotChange: (value: string[]) => void;
+  onTimeSlotDateChange: (value: Date) => void;
   onSubmit: () => void;
   disabled?: boolean;
   disabledDates: Date[];
@@ -21,6 +20,7 @@ interface ListingReservationProps {
 
 const ListingReservation: React.FC<ListingReservationProps> = ({
   onTimeSlotChange,
+  onTimeSlotDateChange,
   price,
   date,
   totalPrice,
@@ -52,7 +52,10 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
       <Calendar
         value={date}
         disabledDates={disabledDates}
-        onChange={(value) => onChangeDate(value)}
+        onChange={(value) => {
+          onChangeDate(value);
+          onTimeSlotDateChange(value);
+        }}
       />
       <TimeSlots
         date={date}
