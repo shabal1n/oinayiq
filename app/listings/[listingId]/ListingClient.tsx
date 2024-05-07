@@ -30,6 +30,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
 }) => {
   const loginModal = useLoginModal();
   const router = useRouter();
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const sport = useMemo(() => {
     const sport = sports.find((sport) => sport.label === listings.sport);
 
@@ -46,13 +47,36 @@ const ListingClient: React.FC<ListingClientProps> = ({
 
   const disabledHours = useMemo(() => {
     let hours: string[] = [];
+    const currentDate = new Date();
+
+    if (
+      selectedDate.getDate() === currentDate.getDate() &&
+      selectedDate.getMonth() === currentDate.getMonth() &&
+      selectedDate.getFullYear() === currentDate.getFullYear()
+    ) {
+      for (let i = 0; i <= currentDate.getHours(); i++) {
+        hours.push(i.toString());
+      }
+    }
 
     reservations.forEach((reservation: any) => {
-      hours = [...hours, ...reservation.timeSlots];
+      const thisResDate = new Date(reservation.date);
+      if (
+        thisResDate.getDate() === selectedDate.getDate() &&
+        thisResDate.getMonth() === selectedDate.getMonth() &&
+        thisResDate.getFullYear() === selectedDate.getFullYear()
+      ) {
+        hours = [
+          ...hours,
+          ...reservation.timeSlots.map(
+            (timeSlot: string) => timeSlot.split(":")[0]
+          ),
+        ];
+      }
     });
 
     return hours;
-  }, [reservations]);
+  }, [reservations, selectedDate]);
 
   const disabledDates = useMemo(() => {
     let dates: Date[] = [];
