@@ -119,8 +119,8 @@ const ListingClient: React.FC<ListingClientProps> = ({
   const [date, setDate] = useState<Date>(new Date());
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
 
-  const handleTimeSlotChange = (slots: string[]) => {
-    setTimeSlots(slots);
+  const handleTimeSlotChange = (slot: string[]) => {
+    setTimeSlots(slot);
   };
 
   const handleTimeSlotDateChange = (value: Date) => {
