@@ -31,11 +31,7 @@ const SearchModal = () => {
   const [step, setStep] = useState(STEPS.LOCATION);
 
   const [location, setLocation] = useState<DistrictSelectValue>();
-  const [dateRange, setDateRange] = useState<Range>({
-    startDate: new Date(),
-    endDate: new Date(),
-    key: "selection",
-  });
+  const [date, setDate] = useState<Date>(new Date());
 
   const {
     register,
@@ -98,12 +94,8 @@ const SearchModal = () => {
       sport: sport,
     };
 
-    if (dateRange.startDate) {
-      updatedQuery.startDate = formatISO(dateRange.startDate);
-    }
-
-    if (dateRange.endDate) {
-      updatedQuery.endDate = formatISO(dateRange.endDate);
+    if (date) {
+      updatedQuery.date = formatISO(date);
     }
 
     const url = qs.stringifyUrl(
@@ -117,7 +109,7 @@ const SearchModal = () => {
     setStep(STEPS.LOCATION);
     searchModal.onClose();
     router.push(url);
-  }, [step, searchModal, location, router, sport, dateRange, onNext, params]);
+  }, [step, searchModal, location, router, sport, date, onNext, params]);
 
   const actionLabel = useMemo(() => {
     if (step === STEPS.DATE) {
@@ -158,8 +150,8 @@ const SearchModal = () => {
           subtitle="Make sure everyone is free!"
         />
         <Calendar
-          onChange={(value) => setDateRange(value.selection)}
-          value={dateRange}
+          onChange={(value) => setDate(value)}
+          value={date}
         />
       </div>
     );

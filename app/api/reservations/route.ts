@@ -13,12 +13,11 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
-  const { listingId, startDate, endDate, totalPrice, timeSlots } = body;
+  const { listingId, date, totalPrice, timeSlots } = body;
 
   if (
     !listingId ||
-    !startDate ||
-    !endDate ||
+    !date ||
     !totalPrice ||
     !timeSlots ||
     timeSlots.length === 0
@@ -42,8 +41,7 @@ export async function POST(request: Request) {
       reservations: {
         create: {
           userId: currentUser.id,
-          startDate,
-          endDate,
+          date,
           totalPrice,
           orderId: payment_order.order.id.trim(),
           timeSlots,

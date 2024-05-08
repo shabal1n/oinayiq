@@ -12,18 +12,14 @@ export default async function getTimeSlots(params: IParams) {
     const reservations = await prisma.reservations.findMany({
       where: {
         listingId,
-        startDate: {
-          lte: date,
-        },
-        endDate: {
-          gte: date,
+        date: {
+          equals: date,
         },
       },
     });
 
     const timeSlots = reservations.map((reservation) => ({
-      startDate: reservation.startDate.toISOString(),
-      endDate: reservation.endDate.toISOString(),
+      date: reservation.date.toISOString(),
     }));
 
     return timeSlots;

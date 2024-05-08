@@ -3,22 +3,14 @@ import prisma from "@/app/libs/prismadb";
 export interface IListingsParams {
   userId?: string;
   sport?: string;
-  startDate?: string;
-  endDate?: string;
+  date?: string;
   locationValue?: string;
   category?: string;
 }
 
 export default async function getListings(params: IListingsParams) {
   try {
-    const {
-      userId,
-      sport,
-      locationValue,
-      startDate,
-      endDate,
-      category,
-    } = params;
+    const { userId, sport, locationValue, date } = params;
 
     let query: any = {};
 
@@ -34,24 +26,26 @@ export default async function getListings(params: IListingsParams) {
       query.locationValue = locationValue;
     }
 
-    if (startDate && endDate) {
-      query.NOT = {
-        reservations: {
-          some: {
-            OR: [
-              {
-                endDate: { gte: startDate },
-                startDate: { lte: startDate },
-              },
-              {
-                startDate: { lte: endDate },
-                endDate: { gte: endDate },
-              },
-            ],
-          },
-        },
-      };
-    }
+    //TODO: Add filter by busy date
+
+    // if (date) {
+    //   query.NOT = {
+    //     reservations: {
+    //       some: {
+    //         OR: [
+    //           {
+    //             date: { gte: startDate },
+    //             startDate: { lte: startDate },
+    //           },
+    //           {
+    //             startDate: { lte: endDate },
+    //             endDate: { gte: endDate },
+    //           },
+    //         ],
+    //       },
+    //     },
+    //   };
+    // }
 
     const listings = await prisma.listings.findMany({
       where: query,

@@ -8,9 +8,14 @@ interface TimeSlotsProps {
   bookedSlots: string[];
   value: string[];
   onTimeSlotChange: (value: string[]) => void;
+  onTimeSlotDateChange: (value: Date) => void;
 }
 
-const TimeSlots: React.FC<TimeSlotsProps> = ({ bookedSlots = [], onTimeSlotChange }) => {
+const TimeSlots: React.FC<TimeSlotsProps> = ({
+  bookedSlots = [],
+  onTimeSlotChange,
+  onTimeSlotDateChange,
+}) => {
   const [selectedSlots, setSelectedSlots] = useState<string[]>([]);
 
   const handleSelect = (slot: string) => {
