@@ -1,11 +1,11 @@
 "use client";
 
-import { on } from "events";
 import React, { useEffect, useState } from "react";
 
 interface TimeSlotsProps {
   date: Date | undefined;
   bookedSlots: string[];
+  selectedSlots: string[];
   value: string[];
   onTimeSlotChange: (value: string[]) => void;
   onTimeSlotDateChange: (value: Date) => void;
@@ -13,18 +13,16 @@ interface TimeSlotsProps {
 
 const TimeSlots: React.FC<TimeSlotsProps> = ({
   bookedSlots = [],
+  selectedSlots,
   onTimeSlotChange,
   onTimeSlotDateChange,
 }) => {
-  const [selectedSlots, setSelectedSlots] = useState<string[]>([]);
-
   const handleSelect = (slot: string) => {
     if (selectedSlots.includes(slot)) {
-      setSelectedSlots(selectedSlots.filter((s) => s !== slot));
+      onTimeSlotChange(selectedSlots.filter((s) => s !== slot));
     } else {
-      setSelectedSlots([...selectedSlots, slot]);
+      onTimeSlotChange([...selectedSlots, slot]);
     }
-    onTimeSlotChange(selectedSlots);
   };
 
   const renderTimeSlots = () => {

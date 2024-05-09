@@ -60,6 +60,7 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
       <TimeSlots
         date={date}
         bookedSlots={bookedTimeSlots}
+        selectedSlots={timeSlots}
         onTimeSlotChange={(value) => {
           onTimeSlotChange(value);
         }}

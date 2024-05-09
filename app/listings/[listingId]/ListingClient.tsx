@@ -45,6 +45,17 @@ const ListingClient: React.FC<ListingClientProps> = ({
     };
   }, [listings.sport]);
 
+  const getHoursBeforeNow = (hours: string[]) => {
+    const currentDate = new Date();
+    const currentHour = currentDate.getHours();
+
+    for (let i = 0; i <= currentHour; i++) {
+      hours.push(i.toString().padStart(2, "0") + ":00");
+    }
+
+    return hours;
+  };
+
   const disabledHours = useMemo(() => {
     let hours: string[] = [];
     const currentDate = new Date();
@@ -74,7 +85,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
         ];
       }
     });
-
+    getHoursBeforeNow(hours);
     return hours;
   }, [reservations, selectedDate]);
 
@@ -115,9 +126,16 @@ const ListingClient: React.FC<ListingClientProps> = ({
   }, [reservations]);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [timeSlots, setTimeSlots] = useState<string[]>([]);
   const [totalPrice, setTotalPrice] = useState(listings.price);
   const [date, setDate] = useState<Date>(new Date());
-  const [timeSlots, setTimeSlots] = useState<string[]>([]);
+
+  useEffect(() => {
+    const now = new Date();
+    const hour = now.getHours();
+    const timeSlot = `${hour < 10 ? "0" + hour : hour}:00`;
+    setTimeSlots([...timeSlots, timeSlot]);
+  }, []);
 
   const handleTimeSlotChange = (slot: string[]) => {
     setTimeSlots(slot);
@@ -183,7 +201,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
       if (listings.price && timeSlots.length > 0) {
         setTotalPrice((timeSlots.length + 1) * listings.price);
       } else {
-        setTotalPrice(listings.price);
+        setTotalPrice(0);
       }
     }
   }, [date, listings.price, timeSlots]);
