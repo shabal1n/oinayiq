@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { use, useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
@@ -30,7 +30,6 @@ const ListingClient: React.FC<ListingClientProps> = ({
 }) => {
   const loginModal = useLoginModal();
   const router = useRouter();
-  const [selectedDate, setSelectedDate] = useState(new Date());
   const [bookedTimeSlots, setBookedTimeSlots] = useState<string[]>([]);
   const sport = useMemo(() => {
     const sport = sports.find((sport) => sport.label === listings.sport);
@@ -51,42 +50,30 @@ const ListingClient: React.FC<ListingClientProps> = ({
     const currentHour = currentDate.getHours();
     let hours: string[] = [];
 
-    for (let i = 0; i <= currentHour; i++) {
-      hours.push(i.toString().padStart(2, "0") + ":00");
+    if (
+      date.getDate() === currentDate.getDate() ||
+      date.getMonth() === currentDate.getMonth() ||
+      date.getFullYear() === currentDate.getFullYear()
+    ) {
+      for (let i = 0; i <= currentHour; i++) {
+        hours.push(i.toString().padStart(2, "0") + ":00");
+      }
     }
     return hours;
   };
 
   const disabledHours = () => {
     let hours: string[] = [];
-    const currentDate = new Date();
+    const today = new Date();
 
     if (
-      selectedDate.getDate() === currentDate.getDate() &&
-      selectedDate.getMonth() === currentDate.getMonth() &&
-      selectedDate.getFullYear() === currentDate.getFullYear()
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
     ) {
-      for (let i = 0; i <= currentDate.getHours(); i++) {
-        hours.push(i.toString());
-      }
+      hours = [...hours, ...getHoursBeforeNow()];
+      console.log("For date ", date, " disabled ", hours);
     }
-
-    reservations.forEach((reservation: any) => {
-      const thisResDate = new Date(reservation.date);
-      if (
-        thisResDate.getDate() === selectedDate.getDate() &&
-        thisResDate.getMonth() === selectedDate.getMonth() &&
-        thisResDate.getFullYear() === selectedDate.getFullYear()
-      ) {
-        hours = [
-          ...hours,
-          ...reservation.timeSlots.map(
-            (timeSlot: string) => timeSlot.split(":")[0]
-          ),
-        ];
-      }
-    });
-    hours = [...hours, ...getHoursBeforeNow()];
     return hours;
   };
 
@@ -137,6 +124,8 @@ const ListingClient: React.FC<ListingClientProps> = ({
 
   const handleTimeSlotDateChange = (value: Date) => {
     const selectedDateStr = format(value, "yyyy-MM-dd");
+    setDate(value);
+    setBookedTimeSlots([]);
 
     const reservedSlotsForSelectedDate = reservations.find((reservation) => {
       const reservationDateStr = format(
@@ -149,10 +138,8 @@ const ListingClient: React.FC<ListingClientProps> = ({
     reservedSlotsForSelectedDate?.push(...disabledHours());
     if (reservedSlotsForSelectedDate) {
       setBookedTimeSlots(reservedSlotsForSelectedDate);
-      console.log("Chnged Date: ", value, " ", reservedSlotsForSelectedDate);
     } else {
       setBookedTimeSlots([]);
-      console.log("Chnged Date: ", value, "with no timeSlots");
     }
   };
 

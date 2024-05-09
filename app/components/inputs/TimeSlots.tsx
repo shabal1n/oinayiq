@@ -15,7 +15,6 @@ const TimeSlots: React.FC<TimeSlotsProps> = ({
   bookedSlots = [],
   selectedSlots,
   onTimeSlotChange,
-  onTimeSlotDateChange,
 }) => {
   const handleSelect = (slot: string) => {
     if (selectedSlots.includes(slot)) {
