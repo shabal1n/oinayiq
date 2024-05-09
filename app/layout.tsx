@@ -5,6 +5,7 @@ import LoginModal from "@/app/components/modals/LoginModal";
 import RegisterModal from "@/app/components/modals/RegisterModal";
 import SearchModal from "@/app/components/modals/SearchModal";
 import RentModal from "@/app/components/modals/RentModal";
+import Footer from "@/app/components/footer/Footer";
 
 import ToasterProvider from "@/app/providers/ToasterProvider";
 
@@ -30,7 +31,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={font.className}>
+      <body className={font.className} style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
         <ClientOnly>
           <ToasterProvider />
           <LoginModal />
@@ -38,9 +39,11 @@ export default async function RootLayout({
           <SearchModal />
           <RentModal />
           <Navbar currentUser={currentUser} />
+          <div className="pb-20 pt-28 flex-grow">{children}</div>
+          <Footer />
         </ClientOnly>
-        <div className="pb-20 pt-28">{children}</div>
       </body>
     </html>
   );
 }
+
