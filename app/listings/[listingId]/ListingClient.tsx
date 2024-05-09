@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { use, useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
@@ -31,6 +31,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
   const loginModal = useLoginModal();
   const router = useRouter();
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [bookedTimeSlots, setBookedTimeSlots] = useState<string[]>([]);
   const sport = useMemo(() => {
     const sport = sports.find((sport) => sport.label === listings.sport);
 
@@ -45,18 +46,18 @@ const ListingClient: React.FC<ListingClientProps> = ({
     };
   }, [listings.sport]);
 
-  const getHoursBeforeNow = (hours: string[]) => {
+  const getHoursBeforeNow = () => {
     const currentDate = new Date();
     const currentHour = currentDate.getHours();
+    let hours: string[] = [];
 
     for (let i = 0; i <= currentHour; i++) {
       hours.push(i.toString().padStart(2, "0") + ":00");
     }
-
     return hours;
   };
 
-  const disabledHours = useMemo(() => {
+  const disabledHours = () => {
     let hours: string[] = [];
     const currentDate = new Date();
 
@@ -85,9 +86,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
         ];
       }
     });
-    getHoursBeforeNow(hours);
+    hours = [...hours, ...getHoursBeforeNow()];
     return hours;
-  }, [reservations, selectedDate]);
+  };
 
   const disabledDates = useMemo(() => {
     let dates: Date[] = [];
@@ -126,25 +127,18 @@ const ListingClient: React.FC<ListingClientProps> = ({
   }, [reservations]);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [timeSlots, setTimeSlots] = useState<string[]>([]);
+  const [selectedTimeSlots, setSelectedTimeSlots] = useState<string[]>([]);
   const [totalPrice, setTotalPrice] = useState(listings.price);
   const [date, setDate] = useState<Date>(new Date());
 
-  useEffect(() => {
-    const now = new Date();
-    const hour = now.getHours();
-    const timeSlot = `${hour < 10 ? "0" + hour : hour}:00`;
-    setTimeSlots([...timeSlots, timeSlot]);
-  }, []);
-
   const handleTimeSlotChange = (slot: string[]) => {
-    setTimeSlots(slot);
+    setSelectedTimeSlots(slot);
   };
 
   const handleTimeSlotDateChange = (value: Date) => {
     const selectedDateStr = format(value, "yyyy-MM-dd");
 
-    const slotsForSelectedDate = reservations.find((reservation) => {
+    const reservedSlotsForSelectedDate = reservations.find((reservation) => {
       const reservationDateStr = format(
         new Date(reservation.date),
         "yyyy-MM-dd"
@@ -152,11 +146,12 @@ const ListingClient: React.FC<ListingClientProps> = ({
       return reservationDateStr === selectedDateStr;
     })?.timeSlots;
 
-    if (slotsForSelectedDate) {
-      setTimeSlots(slotsForSelectedDate);
-      console.log("Chnged Date: ", value, " ", slotsForSelectedDate);
+    reservedSlotsForSelectedDate?.push(...disabledHours());
+    if (reservedSlotsForSelectedDate) {
+      setBookedTimeSlots(reservedSlotsForSelectedDate);
+      console.log("Chnged Date: ", value, " ", reservedSlotsForSelectedDate);
     } else {
-      setTimeSlots([]);
+      setBookedTimeSlots([]);
       console.log("Chnged Date: ", value, "with no timeSlots");
     }
   };
@@ -172,7 +167,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
       const res = await axios.post("/api/reservations", {
         totalPrice: totalPrice,
         date: date,
-        timeSlots: timeSlots,
+        timeSlots: selectedTimeSlots,
         listingId: listings?.id,
       });
       setDate(new Date());
@@ -193,18 +188,18 @@ const ListingClient: React.FC<ListingClientProps> = ({
     router,
     currentUser,
     loginModal,
-    timeSlots,
+    selectedTimeSlots,
   ]);
 
   useEffect(() => {
-    if (date && timeSlots) {
-      if (listings.price && timeSlots.length > 0) {
-        setTotalPrice((timeSlots.length + 1) * listings.price);
+    if (date && selectedTimeSlots.length > 0) {
+      if (listings.price) {
+        setTotalPrice((selectedTimeSlots.length + 1) * listings.price);
       } else {
         setTotalPrice(0);
       }
     }
-  }, [date, listings.price, timeSlots]);
+  }, [date, listings.price, selectedTimeSlots]);
 
   useEffect(() => {
     handleTimeSlotDateChange(date);
@@ -261,8 +256,8 @@ const ListingClient: React.FC<ListingClientProps> = ({
                 onSubmit={onCreateReservation}
                 disabled={totalPrice === 0 || isLoading}
                 disabledDates={disabledDates}
-                bookedTimeSlots={disabledHours}
-                timeSlots={timeSlots}
+                bookedTimeSlots={bookedTimeSlots}
+                timeSlots={selectedTimeSlots}
               />
             </div>
           </div>
