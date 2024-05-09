@@ -259,7 +259,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                 onTimeSlotDateChange={handleTimeSlotDateChange}
                 date={date}
                 onSubmit={onCreateReservation}
-                disabled={isLoading}
+                disabled={totalPrice === 0 || isLoading}
                 disabledDates={disabledDates}
                 bookedTimeSlots={disabledHours}
                 timeSlots={timeSlots}
