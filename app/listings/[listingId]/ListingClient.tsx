@@ -62,17 +62,16 @@ const ListingClient: React.FC<ListingClientProps> = ({
     return hours;
   };
 
-  const disabledHours = () => {
+  const disabledHours = (value: Date) => {
     let hours: string[] = [];
     const today = new Date();
 
     if (
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear()
+      value.getDate() === today.getDate() &&
+      value.getMonth() === today.getMonth() &&
+      value.getFullYear() === today.getFullYear()
     ) {
       hours = [...hours, ...getHoursBeforeNow()];
-      console.log("For date ", date, " disabled ", hours);
     }
     return hours;
   };
@@ -124,7 +123,6 @@ const ListingClient: React.FC<ListingClientProps> = ({
 
   const handleTimeSlotDateChange = (value: Date) => {
     const selectedDateStr = format(value, "yyyy-MM-dd");
-    setDate(value);
     setBookedTimeSlots([]);
 
     const reservedSlotsForSelectedDate = reservations.find((reservation) => {
@@ -135,7 +133,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
       return reservationDateStr === selectedDateStr;
     })?.timeSlots;
 
-    reservedSlotsForSelectedDate?.push(...disabledHours());
+    reservedSlotsForSelectedDate?.push(...disabledHours(value));
     if (reservedSlotsForSelectedDate) {
       setBookedTimeSlots(reservedSlotsForSelectedDate);
     } else {
@@ -236,7 +234,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
               <ListingReservation
                 price={listings.price}
                 totalPrice={totalPrice}
-                onChangeDate={(value) => setDate(value)}
+                onChangeDate={(value) => {
+                  handleTimeSlotDateChange(value);
+                }}
                 onTimeSlotChange={handleTimeSlotChange}
                 onTimeSlotDateChange={handleTimeSlotDateChange}
                 date={date}
