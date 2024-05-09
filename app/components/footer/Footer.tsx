@@ -1,6 +1,6 @@
 "use client";
 import { Currency, Language } from "../../types";
-import "./footer.css";
+import "./Footer.css";
 import React, { useState } from "react";
 import Select from "react-select";
 
@@ -198,8 +198,8 @@ export const Footer: React.FC = () => (
         <div className="payment-methods">
           <h6>Payment Methods</h6>
           <div className="methods-grid">
-            <img src="payment-methods/image.png" alt="visa" />
-            <img src="payment-methods/image2.png" alt="mastercard" />
+            <img src="images/payment-methods/image.webp" alt="visa" />
+            <img src="images/payment-methods/image2.png" alt="mastercard" />
           </div>
         </div>
       </div>
